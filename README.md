@@ -4,6 +4,8 @@ Utilizzando le coordinate esatte della posizione, un aggressore può effettuare 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 I-See-You.sh è una versione migliorata del programma originale sviluppato da Viral Maniar e patchato da DanyBit. 
 https://github.com/Viralmaniar/I-See-You
+Il metodo di acquisizione dei dati GPS dal browser è stato ampiamente aggiornato basandomi su una libreria da me sviluppata e attiva su GitHub Pages, disponibile qui:
+https://github.com/DanyBit/SynthNet
 Questa versione utilizza Cloudflared per creare un tunnel sicuro verso il server PHP locale, sostituendo i metodi precedenti ormai obsoleti.
 Il programma permette di testare funzionalità di geolocalizzazione su dispositivi desktop e mobile, con gestione separata dei permessi e dei messaggi di errore.
 
